@@ -1,0 +1,31 @@
+import { Type } from "@sinclair/typebox";
+
+export const adminUsersSchema = {
+  getRes: Type.Object({
+    id: Type.Number(),
+    firstName: Type.Optional(Type.String({ minLength: 1 })),
+    lastName: Type.Optional(Type.String({ minLength: 1 })),
+    fullName: Type.Optional(Type.String({ minLength: 2 })),
+    phone: Type.Optional(Type.RegEx(/^\+(?:\d\s?){6,14}\d$/)),
+    avatarUrl: Type.Optional(Type.String()),
+    email: Type.String({ format: "email" }),
+    username: Type.String(),
+    status: Type.String(),
+    bio: Type.Optional(Type.String({ format: "date" })),
+    createdAt: Type.String({ format: "date-time" }),
+    updatedAt: Type.String({ format: "date-time" }),
+    role: Type.Optional(Type.Any()),
+    ngo: Type.Optional(Type.Any()),
+    dob: Type.String({ format: "date" }),
+    gender: Type.Optional(Type.String({ minLength: 4, maxLength: 8 })),
+    phoneVerifiedAt: Type.Optional(Type.String({ format: "date-time" })),
+    accountVerifiedAt: Type.Optional(Type.String({ format: "date-time" })),
+    isApproved: Type.Boolean(),
+    hasSubscription: Type.Boolean(),
+    business: Type.Optional(Type.Any()),
+    premuimSub: Type.Optional(Type.Any()),
+    platinumSub: Type.Optional(Type.Any()),
+    virtualOffice: Type.Optional(Type.Any()),
+  }),
+  approveBody: Type.Object({}),
+};
