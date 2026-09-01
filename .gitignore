@@ -1,3 +1,6 @@
+# Claude Code local config (never commit)
+.claude/
+
 # IntelliJ project files
 .idea
 *.iml

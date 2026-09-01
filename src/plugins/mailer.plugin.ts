@@ -27,30 +27,12 @@ export default fp(async function (fastify) {
     }: TSendMail) {
       try {
         // create reusable transporter object using the default SMTP transport
-        // const transporter = createTransport({
-        //   host: process.env.EMAIL_HOST,
-        //   port: parseInt(process.env.EMAIL_PORT || "587"),
-        //   tls: {
-        //     rejectUnauthorized: false,
-        //   },
-        //   auth: {
-        //     user: process.env.EMAIL_USER,
-        //     pass: process.env.EMAIL_PASS,
-        //   },
-        // });
-
-        // const transporter = createTransport({
-        //   service: "Yahoo",
-        //   secure: false,
-        //   auth: {
-        //     user: process.env.EMAIL_USER,
-        //     pass: process.env.EMAIL_PASS,
-        //   },
-        // });
+        // host/port/secure are env-driven so the SMTP provider can be swapped
+        // (e.g. during DNS propagation) via env vars only, no code change needed.
         const transporter = createTransport({
-          host: "mail.privateemail.com",
-          port: 587,
-          secure: false, // true for 465, false for other ports
+          host: process.env.EMAIL_HOST,
+          port: parseInt(process.env.EMAIL_PORT || "587"),
+          secure: process.env.EMAIL_SECURE === "true", // true for 465, false for other ports (e.g. 587 STARTTLS)
           auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS,
