@@ -31,7 +31,7 @@ export default fp(async function (fastify) {
         // (e.g. during DNS propagation) via env vars only, no code change needed.
         const transporter = createTransport({
           host: process.env.EMAIL_HOST,
-          port: parseInt(process.env.EMAIL_PORT || "587"),
+          port: parseInt(process.env.EMAIL_PORT || "465"),
           secure: process.env.EMAIL_SECURE === "true", // true for 465, false for other ports (e.g. 587 STARTTLS)
           auth: {
             user: process.env.EMAIL_USER,
