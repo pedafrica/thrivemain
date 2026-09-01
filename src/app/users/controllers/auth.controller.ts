@@ -34,13 +34,19 @@ export const userSignup: RouteHandlerMethod = async (req, rep) => {
   } = (await user.reload({ include: req.userInclude() })).dataValues;
 
   //@ts-ignore
-  rep.sendMail({
-    body: `Hello ${rest.firstName} <br/><br/> Welcome to Thrive, kindly exercise patience while we verify your status. <br/><br/>
+  rep
+    .sendMail({
+      body: `Hello ${rest.firstName} <br/><br/> Welcome to Thrive, kindly exercise patience while we verify your status. <br/><br/>
     Regards,<br/>
     Thrive Team `,
-    to: email,
-    subject: "Welcome To Thrive",
-  });
+      to: email,
+      subject: "Welcome To Thrive",
+    })
+    // Best-effort: a failed welcome email shouldn't fail signup, but it must
+    // not become an unhandled rejection now that sendMail rethrows.
+    .catch((err: unknown) =>
+      console.error("Failed to send welcome email to", email, err)
+    );
 
   console.log("======================");
 
@@ -222,13 +228,20 @@ export const resetPass: RouteHandlerMethod = async (req, rep) => {
     throw rep.expectationFailed("Failed to updated password, try again");
 
   //@ts-ignore
-  rep.sendMail({
-    body: `Hello <br/><br/> Your password has been successfully updated. You can now login with your new password<br/><br/>
+  rep
+    .sendMail({
+      body: `Hello <br/><br/> Your password has been successfully updated. You can now login with your new password<br/><br/>
     Regards,<br/>
     Thrive Team `,
-    to: decoded.email,
-    subject: "Password Updated",
-  });
+      to: decoded.email,
+      subject: "Password Updated",
+    })
+    // Best-effort: password is already updated in the DB by this point, so a
+    // failed confirmation email shouldn't fail the response — but it must
+    // not become an unhandled rejection now that sendMail rethrows.
+    .catch((err: unknown) =>
+      console.error("Failed to send password-updated email to", decoded.email, err)
+    );
 
   return {
     code: 200,

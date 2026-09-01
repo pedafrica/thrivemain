@@ -54,6 +54,9 @@ export default fp(async function (fastify) {
           `Erorr sending mail to ${to}`,
           error instanceof Error ? error.message : error
         );
+        // Re-throw so callers (and Fastify's default error handler) can see
+        // the failure instead of a silent false-success response.
+        throw error;
       }
     }
   );
