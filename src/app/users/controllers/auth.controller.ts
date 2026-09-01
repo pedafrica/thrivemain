@@ -201,7 +201,7 @@ export const resetPass: RouteHandlerMethod = async (req, rep) => {
   // @ts-ignore
   const { password, confirmPassword, emailVerifiedToken, oldPassword } =
     req.body as Static<typeof authSchema.resetPass>;
-  let decoded;
+  let decoded: any;
   if (oldPassword) {
     // @ts-ignore
     if (!(await compare(oldPassword, req.userModel.dataValues.password)))
